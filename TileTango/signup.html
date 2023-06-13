@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .alert{
+            width: 100px;
+            height: 50px;
+            background-color: green;
+            color: white;
+            text-align: center;
+            display: none;
+            font-size: 15PX;
+
+        }
+    </style>
+    <!-- your head content -->
+</head>
+<body>
+    <div class="container">        
+        <div class="col-6">
+            <nav class="navbar navbar-light bg-light">
+                <a class="navbar-brand" href="#">
+                    <h1 style="text-align: left;">Tiletango</h1>
+                </a>
+            </nav>
+            <h2 class="text-center">Sign Up</h2> 
+            <form action="http://tiletango.in/signup" method="POST" id="signupForm">
+            <div>
+                <div class="alert"><h1>successfully signed up</h1></div>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="">Select</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>                            
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+        </div>
+    </div>
+    <!-- your body content -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyDu02MSF3Ouco18_RdBRvgv_gXmE-K4nNo",
+        authDomain: "home-56156.firebaseapp.com",
+        projectId: "home-56156",
+        storageBucket: "home-56156.appspot.com",
+        messagingSenderId: "367299872213",
+        appId: "1:367299872213:web:1278c1978153349541a95c",
+        measurementId: "G-W6D7J6RNTP"
+      };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+
+        // Get a reference to the database service
+        const database = firebase.database();
+
+        // Get form elements
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const gender = document.getElementById('gender');
+        const phone = document.getElementById('phone');
+
+        // Listen for form submit
+        document.getElementById('signupForm').addEventListener('submit', submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+
+            // Get values
+            const usernameValue = username.value;
+            const emailValue = email.value;
+            const passwordValue = password.value;
+            const genderValue = gender.value;
+            const phoneValue = phone.value;
+
+            // Save message
+            saveMessage(usernameValue, emailValue, passwordValue, genderValue, phoneValue);
+
+            // Show alert
+            document.querySelector('.alert').style.display = 'block';
+
+            // Hide alert after 3 seconds
+            setTimeout(function() {
+                document.querySelector('.alert').style.display = 'none';
+            }, 3000);
+
+            // Clear form
+            document.getElementById('signupForm').reset();
+        }
+
+        // Save message to firebase
+        function saveMessage(username, email, password, gender, phone) {
+            const newMessageRef = firebase.database().ref('messages').push();
+            newMessageRef.set({
+                username: username,
+                email: email,
+                password: password,
+                gender: gender,
+                phone: phone
+            });
+        }
+    </script>
+</body>
+</html>
