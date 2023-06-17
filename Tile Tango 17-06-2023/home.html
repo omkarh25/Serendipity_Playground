@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>tiletango.in</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .navbar {
+            padding: 20px 0;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-item {
+            margin-left: 20px;
+        }
+        .product-img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+        }
+        .text-center-custom {
+          background-color: rgba(0, 0, 0, 0.2);
+      }
+      .alert {
+            width: auto;
+            background-color: green;
+            color: white;
+            text-align: center;
+            display: none;
+            font-size: 15px;
+            margin: 0 auto;
+            margin-top: 10px;
+            padding: 10px;
+        }        
+    </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">TILE TANGO</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-wrap nowrap" id="navbarNav">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                        id="searchInput">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                <ul class="navbar-nav ml-auto d-sm-flex justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Account.html" aria-label="Account"><i class="fas fa-user"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="product.html" aria-label="Product Page"><i
+                                class="fas fa-shopping-bag"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="WishList.html" aria-label="Wishlist"><i
+                                class="fas fa-bookmark"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about-us" data-target="about-us" aria-label="About Us"><i
+                                class="fas fa-info-circle"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact-us" aria-label="Contact Us"><i class="fas fa-phone"></i></a>
+                    </li>
+                    <ul class="navbar-nav ml-auto align-items-center">
+                      <li class="nav-item">
+                        <a href="#signupModal"><button id="signupButton" style="border:none" class="btn btn-outline-primary signup-btn">Sign Up</button></a>
+                      </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-interval="2000">
+            <img src="entrance.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block"></div>
+          </div>
+          <div class="carousel-item" data-interval="2000">
+            <img src="room.jpeg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item" data-interval="2000">
+            <img src="cabin.jpg" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>      
+      <section id="products">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Tile Tango Nylon Mat</h2>
+                    <p>Details about the nylon mat</p>
+                    <img src="plainb.jpg" alt="Nylon Office Mat" class="product-img img-fluid">
+                </div>
+                <div class="col-lg-6">
+                    <h2>Tile Tango Nylon Mat</h2>
+                    <p>Details about the nylon mat...</p>
+                    <img src="plainblue.jpg" alt="Nylon Home Mat" class="product-img img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="about-us">
+        <div class="container-fluid text-center">
+            <h2>About Us</h2>
+            <p>Welcome to Tile Tango, your trusted partner in home and office comfort solutions. We are a dynamic and innovative company dedicated to providing high-quality, durable, and stylish nylon mats.<br>Founded with a vision to revolutionize the flooring industry, Tile Tango has been committed to delivering excellence and customer satisfaction since its inception. Our name, Tile Tango, reflects our passion for creating a harmonious dance between style, comfort, and durability. We believe that just like a perfect tango, your flooring should be a seamless blend of beauty and functionality.<br>Our flagship product, the Tile Tango Nylon Mat, is a testament to our commitment. Crafted with precision and care, these mats are designed to withstand the test of time while adding a touch of elegance to your space. Made from premium quality nylon, our mats offer unparalleled durability, stain resistance, and ease of maintenance. They are perfect for high-traffic areas in your home or office, ensuring your floors are always protected without compromising on style.<br>At Tile Tango, we understand that every space is unique, and so are your needs. That's why we offer a wide range of designs, colors, and sizes to choose from. Whether you're looking for a mat for your kitchen, living room, office, or outdoor space, we've got you covered.<br>Our team is always ready to assist you in finding the perfect mat that suits your style and meets your specific needs. We are not just selling mats; we are providing a solution that enhances your living and working environment.<br>Join us in the Tile Tango journey and experience the perfect blend of style, comfort, and durability. Let's create beautiful spaces together!</p>
+        </div>
+    </section>
+    
+<!-- Add this where you want the modal to appear -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Your sign-up form code goes here -->
+        <form id="signupForm">
+          <div>
+              <div class="alert"><h1>Successfully signed up</h1></div>
+              <div class="form-group">
+                  <label for="username">Username:</label>
+                  <input type="text" class="form-control" id="username" name="username" required>
+              </div>
+              <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+              </div>
+              <div class="form-group">
+                  <label for="password">Password:</label>
+                  <input type="password" class="form-control" id="password" name="password" required>
+              </div>
+              <div class="form-group">
+                  <label for="gender">Gender:</label>
+                  <select class="form-control" id="gender" name="gender" required>
+                      <option value="">Select</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="phone">Phone Number:</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" required>
+              </div>
+              <button type="submit" class="btn btn-primary" id="signupButton">Sign Up</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+    <footer class="footer bg-light text-center text-lg-start">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Tile Tango</h5>
+        <p>Your trusted partner in home and office comfort solutions.</p>
+      </div>
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Follow us</h5>
+        <ul class="list-unstyled mb-0">
+          <li>
+            <a href="https://www.facebook.com/profile.php?id=100093032786570&mibextid=ZbWKwL" target="_blank" rel="noopener" class="btn btn-outline-dark btn-floating m-1" role="button" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/tile_tango?igshid=ZDc4ODBmNjlmNQ==" target="_blank" rel="noopener" class="btn btn-outline-dark btn-floating m-1" role="button" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/8618221715" target="_blank" rel="noopener" class="btn btn-outline-dark btn-floating m-1" role="button" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <section id="contact-us" class="container text-center">
+    <h2>Contact Us</h2>
+    <p>For any inquiries or support, feel free to reach out to us.</p>
+    <p><strong>Phone:</strong> <a href="tel:+918618221715">+91 8618221715</a></p>
+    <p><strong>Email:</strong> support@tiletango.com</p>
+    <p><strong>Office Address:</strong> 18, 1st Main Srinivasnagar, Shankarnag Circle,Bengaluru Urban-560050, Karnataka, India</p>
+</section>
+  <div class="text-center p-3 text-center-custom">
+    © 2023 Tile Tango. All rights reserved.
+  </div>
+</footer>
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <script>
+    
+     // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDu02MSF3Ouco18_RdBRvgv_gXmE-K4nNo",
+    authDomain: "home-56156.firebaseapp.com",
+    databaseURL: "https://home-56156-default-rtdb.firebaseio.com",
+    projectId: "home-56156",
+    storageBucket: "home-56156.appspot.com",
+    messagingSenderId: "367299872213",
+    appId: "1:367299872213:web:ad1024a7c762771041a95c",
+    measurementId: "G-YJFYJETQDD"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Listen for form submit
+  document.getElementById('signupForm').addEventListener('submit', submitForm);
+
+  function submitForm(e) {
+    e.preventDefault();
+
+    // Get values
+    const usernameValue = username.value;
+    const emailValue = email.value;
+    const passwordValue = password.value;
+    const genderValue = gender.value;
+    const phoneValue = phone.value;
+
+    // Check if email already exists
+    const messagesRef = firebase.database().ref('messages');
+    messagesRef.once('value', function(snapshot) {
+      let exists =false;
+      snapshot.forEach(function(childSnapshot) {
+          const childData = childSnapshot.val();
+          if (childData.email === emailValue) {
+              exists = true;
+              return true; // stops the loop
+          }
+      });
+
+      if (exists) {
+          alert('Email already exists. Please use a different email.');
+      } else {
+          // Save message
+          saveMessage(usernameValue, emailValue, passwordValue, genderValue, phoneValue);
+
+          // Show alert
+          document.querySelector('.alert').style.display = 'block';
+
+          // Hide alert after 3 seconds
+          setTimeout(function() {
+              document.querySelector('.alert').style.display = 'none';
+          }, 3000);
+
+          // Clear form
+          document.getElementById('signupForm').reset();
+
+          // Close the modal
+          $('#signupModal').modal('hide');
+      }
+  });
+
+  // Save message to firebase
+  function saveMessage(username, email, password, gender, phone) {
+      const newMessageRef = firebase.database().ref('messages').push();
+      newMessageRef.set({
+          username: username,
+          email: email,
+          password: password,
+          gender: gender,
+          phone: phone
+      });
+  }
+  }
+
+  document.getElementById('signupButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    $('#signupModal').modal('show');
+  });
+</script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
