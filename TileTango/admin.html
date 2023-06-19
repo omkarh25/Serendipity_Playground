@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+        .card {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">TILE TANGO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <form class="form-inline">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="#">Clients</a>
+        <a href="#">Sales</a>
+        <a href="#">Inventory</a>
+    </div>
+    <div id="main">
+        <button class="openbtn" onclick="openNav()">☰ Open</button>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" id="username">Username:</h5>
+                <h6 class="card-subtitle mb-2 text-muted" id="email">Email:</h6>
+                <p class="card-text" id="phone">Phone:</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+    <script>
+var firebaseConfig = {
+            apiKey: "AIzaSyDu02MSF3Ouco18_RdBRvgv_gXmE-K4nNo",
+            authDomain: "home-56156.firebaseapp.com",
+            databaseURL: "https://home-56156-default-rtdb.firebaseio.com",
+            projectId: "home-56156",
+            storageBucket: "home-56156.appspot.com",
+            messagingSenderId: "367299872213",
+            appId: "1:367299872213:web:ad1024a7c762771041a95c",
+            measurementId: "G-YJFYJETQDD"
+        };
+
+        // Initialize Firebase
+        var app = firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+
+        db.collection("messages").doc("-NXxResBkoLN3bZudG6C")
+    .onSnapshot((doc) => {
+        if (doc.exists) {
+            document.querySelector('.card-title').innerText = "Username: " + doc.data().username;
+            document.querySelector('.card-subtitle').innerText = "Email: " + doc.data().email;
+            document.querySelector('.card-text').innerText = "Phone: " + doc.data().phone;
+        }
+    });
+
+
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft= "0";
+        }
+    </script>
+
+    <!-- Other scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
