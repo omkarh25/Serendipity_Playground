@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="EN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>tiletango Product Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>    
     <style>
         /* CSS styles omitted for brevity */
         .header-content {
@@ -98,10 +103,23 @@
             </div>
         </div>
     </main>
-    <footer class="text-center mt-4">
-        <p>&copy; 2023 Tile Tango. All Rights Reserved.</p>
-    </footer>
     <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.database(); // Get a reference to your Firebase Database
+
         let shoppingCart = [];
 
         function addToCart(productId) {
@@ -109,6 +127,16 @@
             let product = { id: productId, quantity: productQuantity };
             shoppingCart.push(product);
             document.getElementById('cart-count').innerText = shoppingCart.length;
+
+            // Save the cart for the current session
+            var cartRef = db.ref('shoppingCart/' + sessionId);
+            cartRef.set(shoppingCart)
+                .then(() => {
+                    console.log('Shopping cart saved to Firebase!');
+                })
+                .catch((error) => {
+                    console.error('Error saving shopping cart to Firebase:', error);
+                });
         }
 
         function removeFromCart(productId) {
@@ -121,6 +149,16 @@
             }
 
             document.getElementById('cart-count').innerText = shoppingCart.length;
+
+            // Save the cart for the current session
+            var cartRef = db.ref('shoppingCart/' + sessionId);
+            cartRef.set(shoppingCart)
+                .then(() => {
+                    console.log('Shopping cart saved to Firebase!');
+                })
+                .catch((error) => {
+                    console.error('Error saving shopping cart to Firebase:', error);
+                });
         }
 
         function renderProducts() {
@@ -136,23 +174,65 @@
                     name: 'Black',
                     description: 'Product description goes here.',
                     price: 'Rs.100',
-                    image: '6box200.jpg'
+                    image: 'Brown mat.jpg'
                 },
                 {
                     id: 2,
                     name: 'White',
                     description: 'Product description goes here.',
                     price: 'Rs.100',
-                    image: '6Plain100.jpg'
+                    image: 'Caramel.png'
                 },
                 {
                     id: 3,
                     name: 'Blue',
                     description: 'Product description goes here.',
                     price: 'Rs.100',
-                    image: '6spray.jpg'
-                }
+                    image: 'Carbon.png'
+                },
                 // Add more products if needed
+                {
+                    id: 4,
+                    name: 'Blue',
+                    description: 'Product description goes here.',
+                    price: 'Rs.100',
+                    image: 'DeepSea.png'
+                },
+                {
+                    id: 5,
+                    name: 'Blue',
+                    description: 'Product description goes here.',
+                    price: 'Rs.100',
+                    image: 'Denim.png'
+                },
+                {
+                    id: 6,
+                    name: 'Blue',
+                    description: 'Product description goes here.',
+                    price: 'Rs.100',
+                    image: 'Grain.png'
+                },
+                {
+                    id: 7,
+                    name: 'Blue',
+                    description: 'Product description goes here.',
+                    price: 'Rs.100',
+                    image: 'Grey mat.jpg'
+                },
+                {
+                    id: 8,
+                    name: 'Blue',
+                    description: 'Product description goes here.',
+                    price: 'Rs.100',
+                    image: 'MidSea.png'
+                },
+                {
+                    id: 9,
+                    name: 'Blue',
+                    description: 'Product description goes here.',
+                    price: 'Rs.100',
+                    image: 'Mochatan.png'
+                }
             ];
 
             products.forEach(function(product) {
@@ -229,19 +309,25 @@
         // Call the renderProducts function to display the products
         renderProducts();
 
-        // Save the shopping cart to local storage
-        function saveCart() {
-            localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
-            alert('Shopping cart saved!');
-        }
-
-        // Load the shopping cart from local storage
+        // Load the shopping cart from Firebase
         function loadCart() {
-            var savedCart = localStorage.getItem('shoppingCart');
-            if (savedCart) {
-                shoppingCart = JSON.parse(savedCart);
-                document.getElementById('cart-count').innerText = shoppingCart.length;
+            // Get the session ID from the user's session storage
+            var sessionId = sessionStorage.getItem('sessionId');
+            if (!sessionId) {
+                // If not, generate a new session ID and store it in the session storage
+                sessionId = generateSessionId();
+                sessionStorage.setItem('sessionId', sessionId);
             }
+
+            // Use the session ID in the database reference
+            var cartRef = db.ref('shoppingCart/' + sessionId);
+            cartRef.once('value').then(function(snapshot) {
+                var savedCart = snapshot.val();
+                if (savedCart) {
+                    shoppingCart = savedCart;
+                    document.getElementById('cart-count').innerText = shoppingCart.length;
+                }
+            });
         }
 
         // Call the loadCart function to load the shopping cart
