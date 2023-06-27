@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="EN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>tiletango Cart Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -10,6 +12,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        .card-img-top {
+           width: 100px;  /* Adjust this value as needed */
+           height: 100px; /* Adjust this value as needed */
+           object-fit: contain;
         }
     </style>
 </head>
@@ -59,55 +66,100 @@
         <p>&copy; 2023 Tile Tango. All Rights Reserved.</p>
     </footer>
     <script>
-        let shoppingCart = [];
+       let shoppingCart = [];
 
-        function loadCart() {
-            var savedCart = localStorage.getItem('shoppingCart');
-            if (savedCart) {
-                shoppingCart = JSON.parse(savedCart);
-                document.getElementById('cart-count').innerText = shoppingCart.length;
-            }
-        }
+// Save the shopping cart to session storage
+function saveCart() {
+    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+    alert('Shopping cart saved!');
+}
 
-        function renderCartItems() {
-            var cartItemsContainer = document.getElementById('cartItems');
+// Load the shopping cart from session storage
+function loadCart() {
+    var savedCart = sessionStorage.getItem('shoppingCart');
+    if (savedCart) {
+        shoppingCart = JSON.parse(savedCart);
+        document.getElementById('cart-count').innerText = shoppingCart.length;
+    }
+}
 
-            // Clear existing cart items
-            cartItemsContainer.innerHTML = '';
+function removeFromCart(index) {
+    shoppingCart.splice(index, 1);
+    sessionStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+    document.getElementById('cart-count').innerText = shoppingCart.length;
+    renderCartItems();
+}
 
-            shoppingCart.forEach(function(item) {
-                var cartItemDiv = document.createElement('div');
-                cartItemDiv.className = 'card mb-3';
+function renderCartItems() {
+    var cartItemsContainer = document.getElementById('cartItems');
+    var totalAmount = 0; // Initialize the total amount to 0
 
-                var cartBody = document.createElement('div');
-                cartBody.className = 'card-body';
+    // Clear existing cart items
+    cartItemsContainer.innerHTML = '';
 
-                var itemTitle = document.createElement('h5');
-                itemTitle.className = 'card-title';
-                itemTitle.textContent = 'Product ID: ' + item.id;
+    shoppingCart.forEach(function(item, index) {
+        var cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'card mb-3';
 
-                var itemQuantity = document.createElement('p');
-                itemQuantity.className = 'card-text';
-                itemQuantity.textContent = 'Quantity: ' + item.quantity;
+        var cartBody = document.createElement('div');
+        cartBody.className = 'card-body';
 
-                cartBody.appendChild(itemTitle);
-                cartBody.appendChild(itemQuantity);
+        var itemTitle = document.createElement('h5');
+        itemTitle.className = 'card-title';
+        itemTitle.textContent = item.name;
 
-                cartItemDiv.appendChild(cartBody);
+        var itemPrice = document.createElement('p');
+        itemPrice.className = 'card-text';
+        itemPrice.textContent = 'Price: ' + item.price;
 
-                cartItemsContainer.appendChild(cartItemDiv);
-            });
-        }
+        var itemQuantity = document.createElement('p');
+        itemQuantity.className = 'card-text';
+        itemQuantity.textContent = 'Quantity: ' + item.quantity;
 
-        function checkout() {
-            alert('Checkout functionality implemented');
-        }
+        var itemImage = document.createElement('img');
+        itemImage.className = 'card-img-top';
+        itemImage.src = item.image;
+        itemImage.alt = item.name;
 
-        // Load the shopping cart from local storage
-        loadCart();
+        var removeButton = document.createElement('button');
+        removeButton.className = 'btn btn-danger';
+        removeButton.textContent = 'Remove from Cart';
+        removeButton.onclick = function() { removeFromCart(index); };
 
-        // Render the cart items
-        renderCartItems();
+        cartBody.appendChild(itemTitle);
+        cartBody.appendChild(itemPrice);
+        cartBody.appendChild(itemQuantity);
+        cartBody.appendChild(itemImage);
+        cartBody.appendChild(removeButton);
+
+        cartItemDiv.appendChild(cartBody);
+
+        cartItemsContainer.appendChild(cartItemDiv);
+
+        // Calculate the subtotal for each item and add it to the total amount
+        var itemSubtotal = parseFloat(item.price.substring(3)) * parseInt(item.quantity);
+        totalAmount += itemSubtotal;
+    });
+
+    // Display the total amount in the cart
+    var totalAmountElement = document.createElement('h5');
+    totalAmountElement.textContent = 'Total Amount: Rs.' + totalAmount.toFixed(2);
+
+    cartItemsContainer.appendChild(totalAmountElement);
+}
+
+
+function checkout() {
+    sessionStorage.setItem('checkoutItems', JSON.stringify(shoppingCart));
+    window.location.href = 'checkout.html';
+}
+
+// Call the loadCart function to load the shopping cart
+loadCart();
+
+// Render the cart items
+renderCartItems();
+
     </script>
 </body>
 </html>
