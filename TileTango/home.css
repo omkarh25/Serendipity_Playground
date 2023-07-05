@@ -1,0 +1,489 @@
+.navbar {
+  background-color:rgb(254, 254, 255) !important; /* Replace with your desired RGB color values */
+}
+
+.navbar .nav-item .nav-link i {
+  display: inline-block; /* Aligns the icons in one line */
+  margin-right: 15px; /* Adds space to the right of each icon */
+  transition: box-shadow 0.3s;
+}
+
+.navbar .nav-item .nav-link i:hover {
+  box-shadow: 0 0 5px 3px rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap");
+:root {
+    --card-width: 200px;
+    --card-height: 300px;
+    --card-transition-duration: 800ms;
+    --card-transition-easing: ease;
+}
+
+/* ... rest of your CSS ... */
+
+.support {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 10px;
+    display: flex;
+    a {
+        margin: 0 10px;
+        color: #fff;
+        font-size: 1.8rem;
+        backface-visibility: hidden;
+        transition: all 150ms ease;
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}
+
+/* ... rest of your CSS ... */
+
+.cardList {
+  position: absolute;
+  width: calc(3 * var(--card-width));
+  height: auto;
+
+  &__btn {
+      --btn-size: 35px;
+      width: var(--btn-size);
+      height: var(--btn-size);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+
+      &.btn--left {
+          left: -5%;
+      }
+
+      &.btn--right {
+          right: -5%;
+      }
+
+      .icon {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.5);
+          border-radius: 50%;
+          transition: background 300ms ease;
+
+          &:hover {
+              background: rgba(0, 0, 0, 0.8);
+          }
+
+          svg {
+              width: 50%;
+              height: 50%;
+          }
+      }
+  }
+
+  .cards__wrapper {
+    position: relative;
+    width: 100%;
+    height: var(--card-height);
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d; /* This allows child elements to be positioned in 3D space */
+  }
+  .card {
+    position: absolute;
+    width: var(--card-width);
+    height: var(--card-height);
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform var(--card-transition-duration) var(--card-transition-easing);
+    box-shadow: 0px 20px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .card__image {
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .card:nth-child(1) { transform: rotateY(0deg) translateZ(300px); }
+  .card:nth-child(2) { transform: rotateY(72deg) translateZ(300px); }
+  .card:nth-child(3) { transform: rotateY(144deg) translateZ(300px); }
+  .card:nth-child(4) { transform: rotateY(216deg) translateZ(300px); }
+  .card:nth-child(5) { transform: rotateY(288deg) translateZ(300px); }
+
+.product-img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
+.text-center-custom {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.signup-btn {
+  border: none;
+}
+
+button.close[data-dismiss="modal"] {
+  padding: 0;
+  width: 2rem; /* Adjust the width as per your preference */
+  height: 2rem; /* Adjust the height as per your preference */
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 1;
+  color: #000;
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 15px;
+}
+
+div.modal-header {
+  position: relative;
+}
+
+h5.modal-title {
+  margin-right: auto;
+}
+
+.modal-body {
+  background-color: rgba(255, 255, 255, 0.13);
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.13);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+  padding: 50px 35px;
+  max-width: 400px; /* Adjust the maximum width as per your preference */
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+.modal-title {
+  color: #fff;
+  text-shadow: 2px 2px 10px black;
+}
+
+label {
+  display: block;
+  margin-top: 2rem;
+  font-size: 0.9rem; /* Adjust the font size as per your preference */
+  color: #fff;
+}
+
+input {
+  outline: none;
+  border: none;
+  width: 100%;
+  background-color: #f4f3f367;
+  border-radius: 4px;
+  padding: 10px 8px; /* Adjust the padding as per your preference */
+  margin-top: 8px;
+  font-weight: 100;
+  color: #574f4f;
+  font-size: 0.9rem; /* Adjust the font size as per your preference */
+}
+
+input::placeholder {
+  color: #574f4f;
+}
+
+.pass {
+  position: relative;
+}
+
+.pass i {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  right: 20px;
+  color: #574f4f;
+  font-size: 0.9rem; /* Adjust the font size as per your preference */
+}
+
+button {
+  margin-top: 30px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 12px 0; /* Adjust the padding as per your preference */
+  font-size: 16px; /* Adjust the font size as per your preference */
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.1s;
+  color: #000;
+}
+
+button:hover {
+  transform: translate(-0.25rem, -0.25rem);
+  box-shadow: 0.25rem 0.25rem #2a2a2c;
+}
+
+hr {
+  margin-top: 15px; /* Adjust the margin as per your preference */
+  height: 1px;
+  background-color: #ffffff7f;
+  border: none;
+  outline: navajowhite;
+}
+
+.social-container h3 {
+  margin-top: 15px; /* Adjust the margin as per your preference */
+  margin-bottom: 15px; /* Adjust the margin as per your preference */
+  color: #fff;
+  font-size: 1rem; /* Adjust the font size as per your preference */
+}
+
+.social div {
+  width: 120px; /* Adjust the width as per your preference */
+  padding: 8px 4px; /* Adjust the padding as per your preference */
+  margin: 0 10px; /* Adjust the margin as per your preference */
+}
+
+.google-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  transition: all 0.3s;
+}
+
+.google-btn:hover {
+  transform: translate(-0.25rem, -0.25rem);
+  box-shadow: 0.25rem 0.25rem #2a2a2c;
+}
+.google-icon {
+  height: 22px; /* Adjust the height as per your preference */
+  width: 22px; /* Adjust the width as per your preference */
+  margin-right: 10px;
+}
+#create-account-button {
+color: white;
+}
+.gg-shopping-cart {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  transform: scale(var(--ggs,1));
+  width: 20px;
+  height: 21px;
+  background:
+  linear-gradient(
+      to left,currentColor 12px,
+      transparent 0)
+  no-repeat -1px 6px/18px 2px,
+  linear-gradient(
+      to left,currentColor 12px,
+      transparent 0)
+  no-repeat 6px 14px/11px 2px,
+  linear-gradient(
+      to left,currentColor 12px,
+      transparent 0)
+  no-repeat 0 2px/4px 2px,
+  radial-gradient(
+      circle,currentColor 60%,
+      transparent 40%)
+  no-repeat 12px 17px/4px 4px,
+  radial-gradient(
+      circle,currentColor 60%,
+      transparent 40%)
+  no-repeat 6px 17px/4px 4px;
+}
+
+.gg-shopping-cart::after,
+.gg-shopping-cart::before {
+  content: "";
+  display: block;
+  position: absolute;
+  box-sizing: border-box;
+  width: 2px;
+  height: 14px;
+  background: currentColor;
+  top: 2px;
+  left: 4px;
+  transform: skew(12deg);
+}
+
+.gg-shopping-cart::after {
+  height: 10px;
+  top: 6px;
+  left: 16px;
+  transform: skew(-12deg);
+}
+.gg-profile,
+.gg-profile::after,
+.gg-profile::before {
+    display: block;
+    box-sizing: border-box;
+    border: 2px solid;
+    border-radius: 100px;
+}
+
+.gg-profile {
+    overflow: hidden;
+    transform: scale(var(--ggs,1));
+    width: 22px;
+    height: 22px;
+    position: relative;
+}
+
+.gg-profile::after,
+.gg-profile::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 8px;
+    height: 8px;
+}
+
+.gg-profile::after {
+    border-radius: 200px;
+    top: 11px;
+    left: 0px;
+    width: 18px;
+    height: 18px;
+}
+.gg-bookmark,
+.gg-bookmark::after {
+    display: block;
+    box-sizing: border-box;
+    border-top-right-radius: 3px;
+}
+
+.gg-bookmark {
+    border: 2px solid;
+    border-bottom: 0;
+    border-top-left-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    transform: scale(var(--ggs,1));
+    width: 14px;
+    height: 16px;
+}
+
+.gg-bookmark::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-top: 2px solid;
+    border-right: 2px solid;
+    transform: rotate(-45deg);
+    top: 9px;
+    left: -1px;
+}
+.gg-info {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs,1));
+  width: 20px;
+  height: 20px;
+  border: 2px solid;
+  border-radius: 40px;
+}
+
+.gg-info::after,
+.gg-info::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border-radius: 3px;
+  width: 2px;
+  background: currentColor;
+  left: 7px;
+}
+
+.gg-info::after {
+  bottom: 2px;
+  height: 8px;
+}
+
+.gg-info::before {
+  height: 2px;
+  top: 2px;
+}
+.gg-phone {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 22px;
+  transform: scale(var(--ggs,1));
+}
+
+.gg-phone::after,
+.gg-phone::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.gg-phone::after {
+  width: 18px;
+  height: 18px;
+  border-top-left-radius: 1px;
+  border-bottom-right-radius: 1px;
+  border-bottom-left-radius: 12px;
+  border-left: 4px solid;
+  border-bottom: 4px solid;
+  left: 2px;
+  bottom: 2px;
+  background:
+  linear-gradient(
+      to left,
+      currentColor 10px,
+      transparent 0
+  ) no-repeat right 11px/6px 4px,
+  linear-gradient(
+      to left,
+      currentColor 10px,
+      transparent 0
+  ) no-repeat -1px 0/4px 6px;
+}
+
+.gg-phone::before {
+  width: 20px;
+  height: 20px;
+  border: 6px double;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-radius: 50%;
+  transform: rotate(-45deg);
+  bottom: 2px;
+  left: 2px;
+}
+
+

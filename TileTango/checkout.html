@@ -127,9 +127,6 @@ function saveDataToFirebase() {
             });
         }
 
-        const twilio = require('twilio');
-
-
         // Attach the saveDataToFirebase function to the Place Order button
         document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
             event.preventDefault(); // Prevent the form from being submitted normally
@@ -191,48 +188,72 @@ function saveDataToFirebase() {
         loadCheckoutItems();
 
         function placeOrder() {
-    // Generate the QR code for payment
-    // This is just a placeholder. In a real application, you would need to integrate with a payment gateway to generate the QR code.
-    var qrCodeUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=9742232621@ybl&size=300x300'; // Replace with the actual API endpoint
+            // Generate the Labnol UPI link
+            var upiLink = 'https://www.labnol.org/upi/';
 
-    // Display the QR code in the modal
-    document.getElementById('TileTango.png').src = qrCodeUrl;
+            // Get the total order amount
+            var totalAmount = calculateTotalAmount(); // Replace with your actual function to calculate the total order amount
 
-    // Show the QR code modal
-    var qrModal = new bootstrap.Modal(document.getElementById('qrModal'));
-    qrModal.show();
+            // Create the UPI payment URL based on the order details
+            var amount = totalAmount.toFixed(2); // Format the amount to two decimal places
+            var merchantName = 'Tile Tango'; // Replace with the actual merchant name
+            var transactionNote = 'Order Payment'; // Replace with the actual transaction note
 
-    // Listen for the modal to be hidden
-    $('#qrModal').on('hidden.bs.modal', function (event) {
-        // Check if the payment was successful
-        // This is just a placeholder. In a real application, you would need to integrate with the payment gateway to check the payment status.
-        var paymentStatusUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=9742232621@ybl&size=300x300'; // Replace with the actual API endpoint
+            upiLink += '?amount=' + amount + '&merchant=' + merchantName + '&note=' + transactionNote;
 
-        fetch(paymentStatusUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.paymentSuccessful) {
-                    alert('Your order has been placed successfully!');
-                } else {
-                    alert('Payment failed. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
+            // Display the QR code in the modal
+            document.getElementById('TileTango.png').src = 'https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(upiLink) + '&size=300x300';
+
+            // Show the QR code modal
+            var qrModal = new bootstrap.Modal(document.getElementById('qrModal'));
+            qrModal.show();
+
+            // Listen for the modal to be hidden
+            $('#qrModal').on('hidden.bs.modal', function (event) {
+                // Check if the payment was successful
+                // This is just a placeholder. In a real application, you would need to integrate with the payment gateway to check the payment status.
+                var paymentStatusUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=9742232621@ybl&size=300x300'; // Replace with the actual API endpoint
+
+                fetch(paymentStatusUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.paymentSuccessful) {
+                            alert('Your order has been placed successfully!');
+                        } else {
+                            alert('Payment failed. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There has been a problem with your fetch operation:', error);
+                    });
             });
-    });
-}
+        }
 
-// Attach the placeOrder function to the Place Order button
-document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the form from being submitted normally
-    placeOrder();
-});
+        // Calculate the total orderamount
+        function calculateTotalAmount() {
+            var shoppingCart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+            var totalAmount = 0;
+
+            shoppingCart.forEach(function (item) {
+                var price = parseFloat(item.price.substring(3));
+                var quantity = parseInt(item.quantity);
+                var subtotal = price * quantity;
+                totalAmount += subtotal;
+            });
+
+            return totalAmount;
+        }
+
+        // Attach the placeOrder function to the Place Order button
+        document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the form from being submitted normally
+            placeOrder();
+        });
 
     </script>
  </body>

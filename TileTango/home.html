@@ -5,36 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>tiletango.in</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href='https://unpkg.com/css.gg@2.0.0/icons/css/profile.css' rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        .navbar {
-            padding: 20px 0;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            font-family: 'Jost', sans-serif;
-        }
-
-        .nav-item {
-            margin-left: 20px;
-        }
-
-        /* Product Image Styles */
-        .product-img {
-            width: 300px;
-            height: 300px;
-            object-fit: cover;
-        }
-
-        /* Custom Text Center Styles */
-        .text-center-custom {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-
-    </style>
+    <link rel="stylesheet" href="home.css">
 </head>
 <body>
   <header>
@@ -46,230 +23,377 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse flex-wrap nowrap" id="navbarNav">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                        id="searchInput">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" aria-label="Search">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
                 <ul class="navbar-nav ml-auto d-sm-flex justify-content-end">
+                  <li class="nav-item">
+                    <a class="nav-link" href="Account.html" aria-label="Account">
+                        <i class="gg-profile"></i>
+                    </a>
+                </li>                
                     <li class="nav-item">
-                        <a class="nav-link" href="Account.html" aria-label="Account"><i class="fas fa-user"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="productpage.html" aria-label="Product Page"><i
-                                class="fas fa-shopping-bag"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="WishList.html" aria-label="Wishlist"><i
-                                class="fas fa-bookmark"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about-us" data-target="about-us" aria-label="About Us"><i
-                                class="fas fa-info-circle"></i></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact-us" aria-label="Contact Us"><i class="fas fa-phone"></i></a>
-                    </li>
-                    <ul class="navbar-nav ml-auto align-items-center">
-                      <li class="nav-item">
-                        <a href="signup.html"><button  style="border:none"class="btn btn-outline-primary signup-btn" onclick="signup()">Sign Up</button></li></a>
-                      </li>
-                </ul>
+                      <a class="nav-link" href="productpage.html" aria-label="Product Page">
+                          <i class="gg-shopping-cart"></i>
+                      </a>
+                  </li>                  
+                  <li class="nav-item">
+                    <a class="nav-link" href="WishList.html" aria-label="Wishlist">
+                        <i class="gg-bookmark"></i>
+                    </a>
+                </li>                
+                <li class="nav-item">
+                  <a class="nav-link" href="#about-us" data-target="about-us" aria-label="About Us">
+                      <i class="gg-info"></i>
+                  </a>
+              </li>              
+              <li class="nav-item">
+                <a class="nav-link" href="#contact-us" aria-label="Contact Us">
+                    <i class="gg-phone"></i>
+                </a>
+            </li>            
+                    <ul class="navbar-nav ml-auto d-sm-flex justify-content-end">
+                        <li class="nav-item">
+                          <!-- Add data-toggle and data-target to the anchor tag -->
+                          <a href="#" class="btn btn-outline-primary signup-btn" data-toggle="modal" data-target="#loginModal">Sign Up</a>
+                        </li>
+                   </ul>
             </div>
         </div>
     </nav>
 </header>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-interval="2000">
-            <img src="entrance.jpg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block"></div>
+<section>
+  <div class="app">
+      <div class="cardList">
+          <button class="cardList__btn btn btn--left">
+              <div class="icon">
+                  <svg>
+                      <use xlink:href="#arrow-left"></use>
+                  </svg>
+              </div>
+          </button>
+          <div class="cards__wrapper">
+              <div class="card current--card">
+                  <div class="card__image">
+                      <img src="https://source.unsplash.com/Z8dtTatMVMw" alt="" />
+                  </div>
+              </div>
+              <div class="card next--card">
+                  <div class="card__image">
+                      <img src="https://source.unsplash.com/9dmycbFE7mQ" alt="" />
+                  </div>
+              </div>
+              <div class="card previous--card">
+                  <div class="card__image">
+                      <img src="https://source.unsplash.com/m7K4KzL5aQ8" alt="" />
+                  </div>
+              </div>
           </div>
-          <div class="carousel-item" data-interval="2000">
-            <img src="room.jpeg" class="d-block w-100" alt="...">
+          <button class="cardList__btn btn btn--right">
+              <div class="icon">
+                  <svg>
+                      <use xlink:href="#arrow-right"></use>
+                  </svg>
+              </div>
+          </button>
+      </div>
+      <div class="infoList">
+          <div class="info__wrapper">
+              <div class="info current--info">
+                  <h1 class="text name">Highlands</h1>
+                  <h4 class="text location">Scotland</h4>
+                  <p class="text description">The mountains are calling</p>
+              </div>
+              <div class="info next--info">
+                  <h1 class="text name">Machu Pichu</h1>
+                  <h4 class="text location">Peru</h4>
+                  <p class="text description">Adventure is never far away</p>
+              </div>
+              <div class="info previous--info">
+                  <h1 class="text name">Chamonix</h1>
+                  <h4 class="text location">France</h4>
+                  <p class="text description">Let your dreams come true</p>
+              </div>
           </div>
-          <div class="carousel-item" data-interval="2000">
-            <img src="cabin.jpg" class="d-block w-100" alt="...">
+      </div>
+      <div class="app__bg">
+          <div class="app__bg__image current--image">
+              <img src="https://source.unsplash.com/Z8dtTatMVMw" alt="" />
           </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>      
-      <section id="products">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <h2>Tile Tango Nylon Mat</h2>
-                    <p>Details about the nylon mat</p>
-                    <img src="plainb.jpg" alt="Nylon Office Mat" class="product-img img-fluid fade-in">
-                </div>
-                <div class="col-lg-6">
-                    <h2>Tile Tango Nylon Mat</h2>
-                    <p>Details about the nylon mat...</p>
-                    <img src="plainblue.jpg" alt="Nylon Home Mat" class="product-img img-fluid fade-in">
-                </div>
+          <div class="app__bg__image next--image">
+              <img src="https://source.unsplash.com/9dmycbFE7mQ" alt="" />
+          </div>
+          <div class="app__bg__image previous--image">
+              <img src="https://source.unsplash.com/m7K4KzL5aQ8" alt="" />
+          </div>
+      </div>
+  </div>
+  <div class="loading__wrapper">
+      <div class="loader--text">Loading...</div>
+      <div class="loader">
+          <span></span>
+      </div>
+  </div>
+  <svg class="icons" style="display: none;">
+      <symbol id="arrow-left" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+          <polyline points='328 112 184 256 328 400'
+                    style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+      </symbol>
+      <symbol id="arrow-right" xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
+          <polyline points='184 112 328 256 184 400'
+                    style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+      </symbol>
+  </svg>
+  <div class="support">
+      <a href="https://twitter.com/DevLoop01" target="_blank"><i class="fab fa-twitter-square"></i></a>
+      <a href="https://dribbble.com/devloop01" target="_blank"><i class="fab fa-dribbble"></i></a>
+  </div>
+</section>
+<section id="products">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2>Tile Tango Nylon Mat</h2>
+                <p>Details about the nylon mat</p>
+                <img src="plainb.jpg" alt="Nylon Office Mat" class="product-img img-fluid">
+            </div>
+            <div class="col-lg-6">
+                <h2>Tile Tango Nylon Mat</h2>
+                <p>Details about the nylon mat...</p>
+                <img src="plainblue.jpg" alt="Nylon Home Mat" class="product-img img-fluid">
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<!-- Rest of your code... -->
+
     <section id="about-us">
         <div class="container-fluid text-center">
             <h2>About Us</h2>
             <p>Welcome to Tile Tango, your trusted partner in home and office comfort solutions. We are a dynamic and innovative company dedicated to providing high-quality, durable, and stylish nylon mats.<br>Founded with a vision to revolutionize the flooring industry, Tile Tango has been committed to delivering excellence and customer satisfaction since its inception. Our name, Tile Tango, reflects our passion for creating a harmonious dance between style, comfort, and durability. We believe that just like a perfect tango, your flooring should be a seamless blend of beauty and functionality.<br>Our flagship product, the Tile Tango Nylon Mat, is a testament to our commitment. Crafted with precision and care, these mats are designed to withstand the test of time while adding a touch of elegance to your space. Made from premium quality nylon, our mats offer unparalleled durability, stain resistance, and ease of maintenance. They are perfect for high-traffic areas in your home or office, ensuring your floors are always protected without compromising on style.<br>At Tile Tango, we understand that every space is unique, and so are your needs. That's why we offer a wide range of designs, colors, and sizes to choose from. Whether you're looking for a mat for your kitchen, living room, office, or outdoor space, we've got you covered.<br>Our team is always ready to assist you in finding the perfect mat that suits your style and meets your specific needs. We are not just selling mats; we are providing a solution that enhances your living and working environment.<br>Join us in the Tile Tango journey and experience the perfect blend of style, comfort, and durability. Let's create beautiful spaces together!</p>
         </div>
     </section>
-    <footer class="footer_v4" style="background-color : #dcdfe7">
-      <div class="top-footer">
-        <div class="container container-v1 ">    
-          <div class="row">
-            <div class="col-lg-2 col-sm-6">
-              <div class="info_footer">
-                <div class="title_footer">          
-                  <h4 class="mb-0 title_border">Shop</h4>         
-                </div>
-                <ul class="list-unstyled mb-0">
-                  <li><a href="/collections/small-sac" title="Small Sac">Small Sac</a></li>
-                  <li><a href="/collections/medium-sac-collection" title="Medium Sac">Medium Sac</a></li>
-                  <li><a href="/collections" title="Big Sac">Big Sac</a></li>
-                  <li><a href="/collections/super-sac" title="Super Sac">Super Sac</a></li>
-                </ul>        
+    <footer class="footer bg-light text-center text-lg-start">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Tile Tango</h5>
+        <p>Your trusted partner in home and office comfort solutions.</p>
+      </div>
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Follow us</h5>
+        <ul class="list-unstyled mb-0">
+          <li>
+            <a href="https://www.facebook.com/profile.php?id=100093032786570&mibextid=ZbWKwL" target="_blank" rel="noopener" class="btn btn-outline-dark btn-floating m-1" role="button" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/tile_tango?igshid=ZDc4ODBmNjlmNQ==" target="_blank" rel="noopener" class="btn btn-outline-dark btn-floating m-1" role="button" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/8618221715" target="_blank" rel="noopener" class="btn btn-outline-dark btn-floating m-1" role="button" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <section id="contact-us" class="container text-center">
+    <h2>Contact Us</h2>
+    <p>For any inquiries or support, feel free to reach out to us.</p>
+    <p><strong>Phone:</strong> <a href="tel:+918618221715">+91 8618221715</a></p>
+    <p><strong>Email:</strong> support@tiletango.com</p>
+    <p><strong>Office Address:</strong> #18 1st Main Srinivasnadar, Shankarnag Circle, Bengaluru Urban-560050, Karnataka, India</p>
+</section>
+  <div class="text-center p-3 text-center-custom">
+    © 2023 Tile Tango. All rights reserved.
+  </div>
+</footer>
+<!-- Add the modal code here -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter email or phone">
+            <label for="password">Password</label>
+            <div class="pass">
+              <input type="password" class="pass" name="password" placeholder="Enter password" id="password">
+              <i id="show-hide" class="fa-solid fa-eye-slash"></i>
+            </div>
+            <button type="submit">Log In</button>
+            <hr>
+            <div class="social-container">
+              <h3> Sign In using </h3>
+              <div class="social">
+                <div class="google-btn" data-onsuccess="onSignIn" data-scope="https://www.googleapis.com/auth/drive" data-longtitle="true" data-theme="dark">
+                  <svg class="google-icon" viewBox="0 0 512 512">
+                      <path d="M120 82V9.1l-34.6-2.6C48.7 19.1 4 70.3 4 128.9 4 186.3 55.9 236.6 120 260.1v-77.7H76.3c-20.8 0-38.9-13.1-45.6-31.5H120z" fill="#fbbc04"/>
+                      <path d="M507.2 208.1c0-11.3-1.5-22.5-4.7-33.3H260v63h147c-6 33.8-25.7 62.7-54.6 82.7l85 66.5c50.2-46.8 78.8-115.3 78.8-179z" fill="#4285f4"/>
+                      <path d="M260 512c68.5 0 125.9-22.8 167.3-61.5l-82.6-64.5c-22.5 15-51.3 23.8-84.7 23.8-65.3 0-120.3-44.1-140.3-103.4H28.9v64.8C75.1 471.8 161.3 512 260 512z" fill="#34a853"/>
+                      <path d="M120 260.1c19.9 58.3 76.7 103.4 140 103.4 33.4 0 63.3-11.4 84.7-31l82.6 64.5C386 492.2 328.6 512 260 512 161.3 512 75.1 471.8 28.9 409.3l91.1-71.4z" fill="#34a853"/>
+                      <path d="M260 94.1c38.6-.6 76 14 104.4 40.8l77.7-77.7C390.6 19.6 331.3 0 260 0 161.3 0 75.1 40.2 28.9 102.7l91.1 70.3C120 113.2 185 94.1 260 94.1z" fill="#ea4335"/>
+                  </svg>OOgle
+              </div>
               </div>
             </div>
-            <div class="col-lg-2 col-sm-6">
-              <div class="info_footer">
-                <div class="title_footer">          
-                  <h4 class="mb-0 title_border">Information</h4>         
-                </div>
-                <ul class="list-unstyled mb-0">
-                  <li><a href="/pages/terms-conditions" title="Terms &amp; Conditions">Terms &amp; Conditions</a></li>
-                  <li><a href="/pages/privacy-policy" title="Privacy Policy">Privacy Policy</a></li>
-                  <li><a href="/pages/faqs" title="FAQs">FAQs</a></li>
-                  <li><a href="/policies/refund-policy" title="Refund Policy">Refund Policy</a></li>
-                </ul>        
-              </div>
-            </div>
-            <div class="col-lg-2 col-sm-6">
-              <div class="info_footer info_contact">
-                <div class="title_footer ">          
-                  <h4 class="mb-0 title_border">Company</h4>         
-                </div>
-                <ul class="list-unstyled mb-0">
-                  <li><a href="/pages/about-us" title="About Us">About Us</a></li>
-                  <li><a href="/pages/contact-us" title="Contact Us">Contact Us</a></li>
-                  <li><a href="/pages/warranty" title="Warranty">Warranty</a></li>
-                </ul>        
-              </div>
-            </div>
-            <div class="col-lg-2 col-sm-6">
-              <div class="info_footer info_contact">
-                <div class="title_footer ">          
-                  <h4 class="mb-0 title_border">Follow Us</h4>         
-                </div>
-                <ul class="list-unstyled mb-0">
-                  <li><a href="tel:%20+91%209591505161" title="Phone: +91 9591505161"><i class="mr-2 fa fa-phone "></i>+91 9591505161</a></li>
-                  <li><a href="mailto:help@tiletango.com" title="Mail : help@tiletango.com"><i class=" mr-2 fa fa-envelope "></i>help@tiletango.com</a></li>
-                  <li><a href="/" title="Address : No.67, 6th Cross, BSK- 1st Stage, Vinayaka Nagar, Bangalore- 560050"><i class="mr-2 fa fa-location-arrow"></i>No.67, 6th Cross, BSK- 1st Stage, Vinayaka Nagar, Bangalore- 560050</a></li>
-                </ul>
-                <div class="mt-3">
-                  <ul class="list-inline list-unstyled mb-0">
-                    <li class="list-inline-item">
-                      <a href="https://twitter.com/tiletango" title="" class="social-item" target="blank"><i class="fa fa-twitter"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="https://www.youtube.com/@tiletango" title="" class="social-item" target="blank"><i class="fa fa-youtube-play"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="https://www.facebook.com/tiletango" title="" class="social-item" target="blank"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="https://www.instagram.com/tiletango" title="" class="social-item" target="blank"><i class="fa fa-instagram"></i></a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-12">
-              <div class="info_footer end">
-                <div class="title_footer ">          
-                  <h4 class="mb-0 title_border">Your inbox looks tired.</h4>         
-                </div>
-                <p class="mb-0 content_footer">Wake it up with new promos, product launches, &amp; Tile Tango secrets.</p>
-                <form class="needs-validation fv4-form " action="#" method="post">
-                  <div class="mb-0">                           
-                    <input type="email" name="EMAIL" class=" text-input" placeholder="Enter your email...">                 
-                  </div>
-                  <button class="btn" type="submit">SUBSCRIBE</button>
-                </form>                        
-              </div>
-            </div>
-          </div>
+             <button type="button" class="btn btn-link" id="create-account-button">Create an Account</button>
+          </form>
         </div>
       </div>
-    </footer>
+    </div>
+  </div>
     <script>
+   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBZB4j8Gaoj7qJz1B4GUAi-XemJGLb8sAg",
+  authDomain: "tiletango-f664c.firebaseapp.com",
+  databaseURL: "https://tiletango-f664c-default-rtdb.firebaseio.com",
+  projectId: "tiletango-f664c",
+  storageBucket: "tiletango-f664c.appspot.com",
+  messagingSenderId: "231074391813",
+  appId: "1:231074391813:web:f64e7fedd0816b3187796c",
+  measurementId: "G-C7J09HP5QF"
+};
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Initialize Google Sign-In API
+    google.accounts.id.initialize({
+      client_id: '231074391813-rbv9p2i5jv559mcf2hv2bh3d7ddge8pf.apps.googleusercontent.com',
+      callback: handleCredentialResponse
+    });
+
+    function handleCredentialResponse(response) {
+      // Retrieve the necessary account data
+      var accountData = {
+        id: response.credential,
+        email: response.email,
+        firstName: response.firstName,
+        lastName: response.lastName,
+        profilePicture: response.profilePicture
+      };
+
+      // Reference to the Firebase Realtime Database
+      var databaseRef = firebase.database().ref('users');
+
+      // Save the account data to the database
+      databaseRef.push(accountData)
+        .then(() => {
+          console.log('Account data saved successfully!');
+          // Display success message to the user or perform any additional actions
+        })
+        .catch(error => {
+          console.error('Error saving account data:', error);
+          // Handle error and display an error message to the user
+        });
+    }
+
+    // Your existing JavaScript code
     document.querySelector('.nav-link[data-target="about-us"]').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById(this.dataset.target).scrollIntoView({ behavior: 'smooth' });
-    var slideIndex = 0;
-  var carouselInterval;
+      e.preventDefault();
+      document.getElementById(this.dataset.target).scrollIntoView({ behavior: 'smooth' });
+      var slideIndex = 0;
+      var carouselInterval;
 
-  function carousel() {
-      var i;
-      var x = document.getElementsByClassName("carousel-item");
-      for (i = 0; i < x.length; i++) {
-          x[i].style.display = "none";  
+      function carousel() {
+        var i;
+        var x = document.getElementsByClassName("carousel-item");
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > x.length) { slideIndex = 1 }
+        x[slideIndex - 1].style.display = "block";
       }
-      slideIndex++;
-      if (slideIndex > x.length) {slideIndex = 1}    
-      x[slideIndex-1].style.display = "block";  
-  }
 
-  // Start the carousel
-  carouselInterval = setInterval(carousel, 3000);
-
-  var searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('focus', function() {
-      // Pause the carousel when the search bar is in focus
-      clearInterval(carouselInterval);
-  });
-
-  searchInput.addEventListener('blur', function() {
-      // Resume the carousel when the search bar is out of focus
+      // Start the carousel
       carouselInterval = setInterval(carousel, 3000);
-  });
 
-  searchInput.addEventListener('keyup', function() {
-      // Get the user's input
-      var input = this.value.toUpperCase();
+      var searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('focus', function() {
+        // Pause the carousel when the search bar is in focus
+        clearInterval(carouselInterval);
+      });
 
-      // Get all the products
-      var products = document.getElementById('products').children;
+      searchInput.addEventListener('blur', function() {
+        // Resume the carousel when the search bar is out of focus
+        carouselInterval = setInterval(carousel, 3000);
+      });
 
-      // Loop through all the products
-      for (var i = 0; i < products.length; i++) {
+      searchInput.addEventListener('keyup', function() {
+        // Get the user's input
+        var input = this.value.toUpperCase();
+
+        // Get all the products
+        var products = document.getElementById('products').children;
+
+        // Loop through all the products
+        for (var i = 0; i < products.length; i++) {
           // If the product's name includes the user's input, display it. Otherwise, hide it.
           if (products[i].innerText.toUpperCase().includes(input)) {
-              products[i].style.display = '';
+            products[i].style.display = '';
           } else {
-              products[i].style.display = 'none';
+            products[i].style.display = 'none';
           }
-      }
-  });
+        }
+      });
+    });
+
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: '231074391813-rbv9p2i5jv559mcf2hv2bh3d7ddge8pf.apps.googleusercontent.com',
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("googleButtonContainer"), // where to put the button
+        { theme: 'outline', size: 'large' }  // button customization
+      );
+    };
+    function handleCredentialResponse(response) {
+  console.log("ID: " + response.credential);
+  // Send response.credential to your server
+
+  // Retrieve the necessary account data from the response.credential object
+  var accountData = {
+    id: response.credential,
+    // Add any other relevant account data here
+  };
+
+  // Reference to the Firebase Realtime Database
+  var databaseRef = firebase.database().ref('users');
+
+  // Save the account data
+  databaseRef.push(accountData)
+    .then(function() {
+      console.log("Account data saved successfully");
+      // Display a success message or perform any other actions
+    })
+    .catch(function(error) {
+      console.error("Failed to save account data:", error);
+      // Handle the error and display an error message
+    });
+}
+/* ... rest of your JavaScript ... */
+
+function waitForImages() {
+    const imgs = [...document.images];
+    const loadedImages = imgs.map(img => {
+        if (img.complete) return Promise.resolve(img);
+        return new Promise(resolve => {
+            img.onload = () => resolve(img);
+        });
+    });
+    return Promise.all(loadedImages);
+}
+
+waitForImages().then(images => {
+    // All images are loaded, you can now manipulate the DOM
+    // Initialize your 3D card carousel here
 });
+
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 </body>
 </html>
