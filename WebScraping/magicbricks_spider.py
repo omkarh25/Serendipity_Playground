@@ -61,7 +61,6 @@
 # df.to_excel("housing.xlsx", index=False)
 # print("housing.xlsx")
 
-
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -102,16 +101,11 @@ def scrape_quikr_properties():
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Extract data
-        locations = [loc.get_text().strip() for loc in soup.select('a.notclickb')]
-        project_names = [proj.get_text().strip() for proj in soup.select('a.notclickb.projectname')]
-        
-        # Extracting prices with more precision
-        price_elements = [elem for elem in soup.select('span') if "Lakh" in elem.get_text() or "Crore" in elem.get_text()]
-        prices = [convert_price(price.get_text().strip()) for price in price_elements]
-        
-        builtup_areas = [int(area.get_text().split()[0]) for area in soup.select('span') if 'sq.ft.' in area.get_text()]
+        locations = [loc.get_text().strip().split(" in ")[-1] for loc in soup.select('a.notclickb.projectname')]
+        prices = [convert_price(price.get_text().strip()) for price in soup.select('span') if "Lakh" in price.get_text() or "Crore" in price.get_text()]
+        builtup_areas = [int(area.get_text().split()[0]) for area in soup.select('span') if 'sq.ft.' in area.get_text() and area.get_text().split()[0].replace('.', '', 1).isdigit()]
 
-        page_data = list(zip(locations, project_names, prices, builtup_areas))
+        page_data = list(zip(locations, prices, builtup_areas))
         all_data.extend(page_data)
 
         page_number += 1
@@ -122,6 +116,74 @@ def scrape_quikr_properties():
 data = scrape_quikr_properties()
 
 # Convert data to DataFrame and save to a new Excel file
-df = pd.DataFrame(data, columns=["Location", "Project Name", "Price", "Built-up Area (sq.ft.)"])
-df.to_excel("scraped_data_new.xlsx", index=False)
-print("Data saved to 'scraped_data_new.xlsx'")
+df = pd.DataFrame(data, columns=["Location", "Price", "Built-up Area (sq.ft.)"])
+df.to_excel("qucikrr11.xlsx", index=False)
+print("Data saved to 'qucikrr11.xlsx'")
+
+# import requests
+# from bs4 import BeautifulSoup
+# import time
+# import pandas as pd
+
+# def convert_price(price_str):
+#     try:
+#         price_str = price_str.strip().replace(",", "")
+#         if "Lakh" in price_str:
+#             return int(float(price_str.replace("Lakh", "").strip()) * 1e5)
+#         elif "Crore" in price_str:
+#             return int(float(price_str.replace("Crore", "").strip()) * 1e7)
+#         else:
+#             return int(price_str)
+#     except ValueError:
+#         return None
+
+# def is_number(s):
+#     try:
+#         int(s)
+#         return True
+#     except ValueError:
+#         return False
+
+# def scrape_quikr_properties():
+#     base_url = "https://www.quikr.com/homes/property/residential-builderfloors-for-sale-in-bangalore-cid_23"
+#     all_data = []
+#     max_pages = 100
+#     current_page = 1
+
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+#     }
+
+#     while current_page <= max_pages:
+#         print(f"Scraping page {current_page}...")
+#         response = requests.get(base_url + "?page=" + str(current_page), headers=headers)
+        
+#         if response.status_code != 200:
+#             print(f"Failed to retrieve page {current_page}.")
+#             print(f"Status code: {response.status_code}")
+#             print(response.text)
+#             current_page += 1
+#             continue
+
+#         soup = BeautifulSoup(response.text, 'html.parser')
+
+#         # Extract data
+#         locations = [loc.get_text().strip().split(" in ")[-1] for loc in soup.select('a.listtitle.notclickb')]
+#         prices = [convert_price(price.get_text().strip()) for price in soup.select('span') if "Lakh" in price.get_text() or "Crore" in price.get_text()]
+#         builtup_areas = [int(area.get_text().split()[0]) for area in soup.select('span') if 'sq.ft.' in area.get_text() and is_number(area.get_text().split()[0])]
+
+#         # Add data to our list
+#         page_data = list(zip(locations, prices, builtup_areas))
+#         all_data.extend(page_data)
+
+#         current_page += 1
+#         time.sleep(2)
+
+#     return all_data
+
+# data = scrape_quikr_properties()
+
+# # Convert data to DataFrame and save to a new Excel file
+# df = pd.DataFrame(data, columns=["Location", "Price", "Built-up Area (sq.ft.)"])
+# df.to_excel("scraped_data_new4.xlsx", index=False)
+# print("Data saved to 'scraped_data_new4.xlsx'")
