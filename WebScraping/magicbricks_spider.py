@@ -250,66 +250,135 @@
 # df.to_excel("residential_v2.xlsx", index=False)
 # print("Data saved to 'residential_v2.xlsx'")
 
-import requests
+
+# import requests
+# from bs4 import BeautifulSoup
+# import pandas as pd
+# import time
+
+# def scrape_housing_properties(base_url, headers, pages_to_scrape):
+#     all_data = []
+#     for page in range(1, pages_to_scrape + 1):
+#         print(f"Scraping page {page}...")
+#         response = requests.get(f"{base_url}{page}", headers=headers)
+#         if response.status_code != 200:
+#             print(f"Failed to retrieve page {page}. Status code: {response.status_code}")
+#             continue
+
+#         soup = BeautifulSoup(response.text, 'html.parser')
+#         property_listings = soup.find_all('div', class_='css-xvyvcx')
+
+#         for property_listing in property_listings:
+#             location_element = property_listing.find('h1', class_='css-1hidc9c')
+#             price_element = property_listing.find('div', class_='css-1rhznz4')
+#             area_element = property_listing.find('div', class_='_h3yh40')
+
+#             if location_element and price_element and area_element:
+#                 location = location_element.text.strip()
+#                 price = price_element.text.strip()
+#                 area = area_element.text.strip().split(' ')[0]  # Get the first number only
+
+#                 all_data.append({
+#                     "Location": location,
+#                     "Price": price,
+#                     "Built-up Area (sq.ft.)": area
+#                 })
+#             else:
+#                 print(f"Missing data for listing on page {page}, skipping...")
+
+#         time.sleep(1)  # Polite scraping by adding a delay between requests
+
+#     return all_data
+
+# # URL and headers
+# base_url = "https://housing.com/in/buy/bangalore/bangalore?page="
+# headers = {
+#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+# }
+
+# # Number of pages you want to scrape
+# pages_to_scrape = 5  # Adjust this to the number of pages you want to scrape
+
+# # Scrape the properties
+# properties_data = scrape_housing_properties(base_url, headers, pages_to_scrape)
+
+# # Convert data to DataFrame
+# df = pd.DataFrame(properties_data)
+
+# # Specify the path where you want to save the Excel file
+# excel_path = 'C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\housingg_data.xlsx'
+
+# # Save the DataFrame to an Excel file
+# df.to_excel(excel_path, index=False)
+
+# print(f"Data saved to '{excel_path}'")
+
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
 
-# Function to convert price string to integer
-def convert_price(price_str):
-    price_str = price_str.replace('₹', '').replace(',', '').strip()
-    if 'Cr' in price_str:
-        return int(float(price_str.replace('Cr', '').strip()) * 1e7)
-    elif 'L' in price_str:
-        return int(float(price_str.replace('L', '').strip()) * 1e5)
-    return int(price_str)
+# Initialize the Chrome driver
+chrome_path = "C:/path/to/your/chromedriver.exe"  # Update this path
+service = Service(chrome_path)
+options = Options()
+options.headless = True  # Change to False if you want to see the browser window
+driver = webdriver.Chrome(service=service, options=options)
 
-# Function to clean and extract built-up area
-def convert_area(area_str):
-    if '-' in area_str:
-        area_str = area_str.split('-')[0]  # take the lower end if it's a range
-    return int(area_str.replace('sq.ft.', '').strip().replace(',', ''))
-
-# Function to scrape housing properties
-def scrape_housing_properties():
-    base_url = "https://housing.com/in/buy/bangalore/bangalore?page="
-    headers = {
-        'User-Agent': 'Mozilla/5.0 ...'
-    }
-    all_data = []
-    
-    # Scrape 5 pages
-    for page in range(1, 6):
-        print(f"Scraping page {page}...")
-        response = requests.get(base_url + str(page), headers=headers)
-        if response.status_code != 200:
-            print(f"Failed to retrieve page {page}. Status code: {response.status_code}")
+# Function to handle the infinite scrolling
+def scroll_to_bottom():
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)  # Wait for page to load
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
             break
+        last_height = new_height
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+# Function to extract property data using BeautifulSoup
+def extract_properties():
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    properties = []
+    property_cards = soup.select('div[data-testid="property-card"]')  # Update this if needed
+    for card in property_cards:
+        try:
+            location = card.select_one('h1.css-1hidc9c').text
+            price = card.select_one('span.css-19rl1ms').text
+            area = card.select_one('div._h3yh40').text
+            properties.append({
+                'Location': location,
+                'Price': price,
+                'Built-up Area': area
+            })
+        except AttributeError:
+            continue  # Skip if any information is missing
+    return properties
 
-        # Assuming these are the correct selectors for the website's current layout
-        property_listings = soup.find_all('div', {'class': 'css-1nr7r9e'})
+# Visit the website
+url = 'https://housing.com/in/buy/bangalore/bangalore'
+driver.get(url)
+time.sleep(3)  # Wait for the initial page to load
 
-        for property_listing in property_listings:
-            price = property_listing.find('div', {'class': '_csbfng'}).get_text()
-            location = property_listing.find('div', {'class': '_c8f6fq'}).get_text()
-            area = property_listing.find('div', {'class': '_h3yh40'}).get_text()
+# Scroll to the bottom to load all the content
+scroll_to_bottom()
 
-            formatted_price = convert_price(price)
-            formatted_area = convert_area(area)
-            
-            all_data.append((location, formatted_price, formatted_area))
+# Extract the data
+data = extract_properties()
 
-        time.sleep(1)  # Polite scraping by adding a delay between requests
+# Close the Selenium driver
+driver.quit()
 
-    return all_data
-
-# Call the function to start scraping
-data = scrape_housing_properties()
-
-# Convert data to DataFrame and save to a new Excel file
-df = pd.DataFrame(data, columns=["Location", "Price", "Built-up Area (sq.ft.)"])
-excel_path = "C:/Users/91861/OneDrive/Desktop/housing.xlsx"  # Change this to your desired path
+# Create a DataFrame and save to Excel
+df = pd.DataFrame(data)
+excel_path = 'C:/Users/91861/OneDrive/Desktop/bhoodevi/housinggg_data.xlsx'  # Update the path
 df.to_excel(excel_path, index=False)
-print(f"Data saved to '{excel_path}'")
+
+print(f"Data has been saved to {excel_path}")
