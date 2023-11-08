@@ -313,72 +313,155 @@
 
 # print(f"Data saved to '{excel_path}'")
 
+# import requests
+# from bs4 import BeautifulSoup
+# import pandas as pd
+# import time
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+# # Function to scrape property details from a single page
+# def get_property_details(url, headers):
+#     response = requests.get(url, headers=headers)
+#     soup = BeautifulSoup(response.content, 'html.parser')
+
+#     properties = []
+#     # Update the class name if the website's layout has changed
+#     cards = soup.find_all('div', class_='snb-tile')  # Ensure this is the correct class for property cards
+
+#     for card in cards:
+#         # Extract the location
+#         location_tag = card.find('a', class_='gtpnd')
+#         location = location_tag.text.strip() if location_tag else 'N/A'
+        
+#         # Extract the price
+#         price_tag = card.find('span', class_='s_p')
+#         price = price_tag.get_text(strip=True).replace(u'\xa0', u' ') if price_tag else 'N/A'
+        
+#         # Extract the built-up area
+#         area_tag = card.find('span', class_='s_p').find_next('span')  # Modified to find the next span tag
+#         area = area_tag.get_text(strip=True).split(' ')[0] if area_tag and area_tag.get_text(strip=True).split() else 'N/A'
+
+#         properties.append({
+#             'Location': location,
+#             'Price': price,
+#             'Built-up Area': area
+#         })
+
+#     return properties, response
+
+# # Function to scrape multiple pages
+# def scrape_commonfloor(max_pages):
+#     base_url = "https://www.commonfloor.com/bangalore-property/for-sale"
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+#     }
+    
+#     all_properties = []
+#     for page in range(1, max_pages + 1):
+#         print(f"Scraping page: {page}")
+#         current_url = f"{base_url}?page={page}"
+#         properties, response = get_property_details(current_url, headers)
+#         all_properties.extend(properties)
+#         time.sleep(1)  # Polite delay between page requests
+
+#         # Check for the 'Next' button
+#         soup = BeautifulSoup(response.content, 'html.parser')
+#         next_button = soup.select_one('a[name="Next"]')
+#         if not next_button:
+#             print("No more pages left to scrape.")
+#             break
+
+#     return all_properties
+
+# # Set the number of pages you want to scrape
+# max_pages = 10
+
+# # Scrape the properties
+# property_list = scrape_commonfloor(max_pages)
+
+# # Create DataFrame and save to Excel
+# df = pd.DataFrame(property_list)
+# excel_file_path = "C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\commonfloor_properties.xlsx"  # Change the path as needed for your environment
+# df.to_excel(excel_file_path, index=False)
+
+# print(f"Data saved to {excel_file_path}")
+
+
+import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import time
 
-# Initialize the Chrome driver
-chrome_path = "C:/path/to/your/chromedriver.exe"  # Update this path
-service = Service(chrome_path)
-options = Options()
-options.headless = True  # Change to False if you want to see the browser window
-driver = webdriver.Chrome(service=service, options=options)
+# Function to convert price string to integer
+def convert_price(price_str):
+    price_str = price_str.replace(' ', '').replace(',', '')
+    if 'L' in price_str:
+        return int(float(price_str.split('L')[0]) * 1e5)
+    elif 'Cr' in price_str:
+        return int(float(price_str.split('Cr')[0]) * 1e7)
+    return None  # None for no match, you can add more conditions if needed
 
-# Function to handle the infinite scrolling
-def scroll_to_bottom():
-    last_height = driver.execute_script("return document.body.scrollHeight")
-    while True:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)  # Wait for page to load
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            break
-        last_height = new_height
+# Function to scrape property details from a single page
+def get_property_details(url, headers):
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, 'html.parser')
 
-# Function to extract property data using BeautifulSoup
-def extract_properties():
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
     properties = []
-    property_cards = soup.select('div[data-testid="property-card"]')  # Update this if needed
-    for card in property_cards:
-        try:
-            location = card.select_one('h1.css-1hidc9c').text
-            price = card.select_one('span.css-19rl1ms').text
-            area = card.select_one('div._h3yh40').text
-            properties.append({
-                'Location': location,
-                'Price': price,
-                'Built-up Area': area
-            })
-        except AttributeError:
-            continue  # Skip if any information is missing
-    return properties
+    cards = soup.find_all('div', class_='snb-tile')  # Ensure this is the correct class for property cards
 
-# Visit the website
-url = 'https://housing.com/in/buy/bangalore/bangalore'
-driver.get(url)
-time.sleep(3)  # Wait for the initial page to load
+    for card in cards:
+        # Extract the location
+        location_tag = card.find('a', class_='gtpnd')
+        location = location_tag.text.strip() if location_tag else 'N/A'
+        
+        # Extract the price and convert it
+        price_tag = card.find('span', class_='s_p')
+        price = convert_price(price_tag.get_text(strip=True).replace(u'\xa0', u' ')) if price_tag else 'N/A'
+        
+        # Extract the built-up area
+        area_tag = card.find('span', class_='s_p').find_next('span')
+        area = area_tag.get_text(strip=True).split(' ')[0] if area_tag and area_tag.get_text(strip=True).split() else 'N/A'
 
-# Scroll to the bottom to load all the content
-scroll_to_bottom()
+        properties.append({
+            'Location': location,
+            'Price': price,
+            'Built-up Area': area
+        })
 
-# Extract the data
-data = extract_properties()
+    return properties, response
 
-# Close the Selenium driver
-driver.quit()
+# Function to scrape multiple pages
+def scrape_commonfloor(max_pages):
+    base_url = "https://www.commonfloor.com/bangalore-property/for-sale"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
+    all_properties = []
+    for page in range(1, max_pages + 1):
+        print(f"Scraping page: {page}")
+        current_url = f"{base_url}?page={page}"
+        properties, response = get_property_details(current_url, headers)
+        all_properties.extend(properties)
+        time.sleep(1)  # Polite delay between page requests
 
-# Create a DataFrame and save to Excel
-df = pd.DataFrame(data)
-excel_path = 'C:/Users/91861/OneDrive/Desktop/bhoodevi/housinggg_data.xlsx'  # Update the path
-df.to_excel(excel_path, index=False)
+        # Check for the 'Next' button
+        soup = BeautifulSoup(response.content, 'html.parser')
+        next_button = soup.select_one('a[name="Next"]')
+        if not next_button:
+            print("No more pages left to scrape.")
+            break
 
-print(f"Data has been saved to {excel_path}")
+    return all_properties
+
+# Set the number of pages you want to scrape
+max_pages =200
+
+# Scrape the properties
+property_list = scrape_commonfloor(max_pages)
+
+# Create DataFrame and save to Excel
+df = pd.DataFrame(property_list)
+excel_file_path = "C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\common_floor 22.xlsx"  # Change the path as needed for your environment
+df.to_excel(excel_file_path, index=False)
+
+print(f"Data saved to {excel_file_path}")
