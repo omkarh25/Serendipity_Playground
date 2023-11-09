@@ -396,7 +396,7 @@ def convert_price(price_str):
     price_str = price_str.replace(' ', '').replace(',', '')
     if 'L' in price_str:
         return int(float(price_str.split('L')[0]) * 1e5)
-    elif 'Cr' in price_str:
+    elif 'Cr' in price_str: 
         return int(float(price_str.split('Cr')[0]) * 1e7)
     return None  # None for no match, you can add more conditions if needed
 
@@ -431,7 +431,7 @@ def get_property_details(url, headers):
 
 # Function to scrape multiple pages
 def scrape_commonfloor(max_pages):
-    base_url = "https://www.commonfloor.com/bangalore-property/for-sale"
+    base_url = "https://www.commonfloor.com/bangalore-property/for-sale/plot-htt"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
@@ -454,14 +454,25 @@ def scrape_commonfloor(max_pages):
     return all_properties
 
 # Set the number of pages you want to scrape
-max_pages =200
+max_pages = 5  # Reduced for demonstration, change as needed
 
 # Scrape the properties
 property_list = scrape_commonfloor(max_pages)
 
-# Create DataFrame and save to Excel
+# Create DataFrame
 df = pd.DataFrame(property_list)
-excel_file_path = "C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\common_floor 22.xlsx"  # Change the path as needed for your environment
-df.to_excel(excel_file_path, index=False)
 
-print(f"Data saved to {excel_file_path}")
+# Try saving to the specified path
+excel_file_path = "C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\plot.xlsx"
+
+# Attempt to save the DataFrame to Excel, handle exceptions
+try:
+    df.to_excel(excel_file_path, index=False)
+    print(f"Data saved to {excel_file_path}")
+except PermissionError:
+    alternative_path = "C:\\Users\\91861\\Documents\\plot.xlsx"
+    try:
+        df.to_excel(alternative_path, index=False)
+        print(f"PermissionError for the first path. Data saved to alternative path {alternative_path}")
+    except Exception as e:
+        print(f"Failed to save data to both paths. Error: {e}")
