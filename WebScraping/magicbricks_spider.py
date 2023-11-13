@@ -386,93 +386,94 @@
 # print(f"Data saved to {excel_file_path}")
 
 
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
-import time
+# import requests
+# from bs4 import BeautifulSoup
+# import pandas as pd
+# import time
 
-# Function to convert price string to integer
-def convert_price(price_str):
-    price_str = price_str.replace(' ', '').replace(',', '')
-    if 'L' in price_str:
-        return int(float(price_str.split('L')[0]) * 1e5)
-    elif 'Cr' in price_str: 
-        return int(float(price_str.split('Cr')[0]) * 1e7)
-    return None  # None for no match, you can add more conditions if needed
+# # Function to convert price string to integer
+# def convert_price(price_str):
+#     price_str = price_str.replace(' ', '').replace(',', '')
+#     if 'L' in price_str:
+#         return int(float(price_str.split('L')[0]) * 1e5)
+#     elif 'Cr' in price_str: 
+#         return int(float(price_str.split('Cr')[0]) * 1e7)
+#     return None  # None for no match, you can add more conditions if needed
 
-# Function to scrape property details from a single page
-def get_property_details(url, headers):
-    response = requests.get(url, headers=headers)
-    soup = BeautifulSoup(response.content, 'html.parser')
+# # Function to scrape property details from a single page
+# def get_property_details(url, headers):
+#     response = requests.get(url, headers=headers)
+#     soup = BeautifulSoup(response.content, 'html.parser')
 
-    properties = []
-    cards = soup.find_all('div', class_='snb-tile')  # Ensure this is the correct class for property cards
+#     properties = []
+#     cards = soup.find_all('div', class_='snb-tile')  # Ensure this is the correct class for property cards
 
-    for card in cards:
-        # Extract the location
-        location_tag = card.find('a', class_='gtpnd')
-        location = location_tag.text.strip() if location_tag else 'N/A'
+#     for card in cards:
+#         # Extract the location
+#         location_tag = card.find('a', class_='gtpnd')
+#         location = location_tag.text.strip() if location_tag else 'N/A'
         
-        # Extract the price and convert it
-        price_tag = card.find('span', class_='s_p')
-        price = convert_price(price_tag.get_text(strip=True).replace(u'\xa0', u' ')) if price_tag else 'N/A'
+#         # Extract the price and convert it
+#         price_tag = card.find('span', class_='s_p')
+#         price = convert_price(price_tag.get_text(strip=True).replace(u'\xa0', u' ')) if price_tag else 'N/A'
         
-        # Extract the built-up area
-        area_tag = card.find('span', class_='s_p').find_next('span')
-        area = area_tag.get_text(strip=True).split(' ')[0] if area_tag and area_tag.get_text(strip=True).split() else 'N/A'
+#         # Extract the built-up area
+#         area_tag = card.find('span', class_='s_p').find_next('span')
+#         area = area_tag.get_text(strip=True).split(' ')[0] if area_tag and area_tag.get_text(strip=True).split() else 'N/A'
 
-        properties.append({
-            'Location': location,
-            'Price': price,
-            'Built-up Area': area
-        })
+#         properties.append({
+#             'Location': location,
+#             'Price': price,
+#             'Built-up Area': area
+#         })
 
-    return properties, response
+#     return properties, response
 
-# Function to scrape multiple pages
-def scrape_commonfloor(max_pages):
-    base_url = "https://www.commonfloor.com/bangalore-property/for-sale/plot-htt"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
+# # Function to scrape multiple pages
+# def scrape_commonfloor(max_pages):
+#     base_url = "https://www.commonfloor.com/bangalore-property/for-sale/plot-htt"
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+#     }
     
-    all_properties = []
-    for page in range(1, max_pages + 1):
-        print(f"Scraping page: {page}")
-        current_url = f"{base_url}?page={page}"
-        properties, response = get_property_details(current_url, headers)
-        all_properties.extend(properties)
-        time.sleep(1)  # Polite delay between page requests
+#     all_properties = []
+#     for page in range(1, max_pages + 1):
+#         print(f"Scraping page: {page}")
+#         current_url = f"{base_url}?page={page}"
+#         properties, response = get_property_details(current_url, headers)
+#         all_properties.extend(properties)
+#         time.sleep(1)  # Polite delay between page requests
 
-        # Check for the 'Next' button
-        soup = BeautifulSoup(response.content, 'html.parser')
-        next_button = soup.select_one('a[name="Next"]')
-        if not next_button:
-            print("No more pages left to scrape.")
-            break
+#         # Check for the 'Next' button
+#         soup = BeautifulSoup(response.content, 'html.parser')
+#         next_button = soup.select_one('a[name="Next"]')
+#         if not next_button:
+#             print("No more pages left to scrape.")
+#             break
 
-    return all_properties
+#     return all_properties
 
-# Set the number of pages you want to scrape
-max_pages = 5  # Reduced for demonstration, change as needed
+# # Set the number of pages you want to scrape
+# max_pages = 5  # Reduced for demonstration, change as needed
 
-# Scrape the properties
-property_list = scrape_commonfloor(max_pages)
+# # Scrape the properties
+# property_list = scrape_commonfloor(max_pages)
 
-# Create DataFrame
-df = pd.DataFrame(property_list)
+# # Create DataFrame
+# df = pd.DataFrame(property_list)
 
-# Try saving to the specified path
-excel_file_path = "C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\plot.xlsx"
+# # Try saving to the specified path
+# excel_file_path = "C:\\Users\\91861\\OneDrive\\Desktop\\bhoodevi\\WebScraping\\plot.xlsx"
 
-# Attempt to save the DataFrame to Excel, handle exceptions
-try:
-    df.to_excel(excel_file_path, index=False)
-    print(f"Data saved to {excel_file_path}")
-except PermissionError:
-    alternative_path = "C:\\Users\\91861\\Documents\\plot.xlsx"
-    try:
-        df.to_excel(alternative_path, index=False)
-        print(f"PermissionError for the first path. Data saved to alternative path {alternative_path}")
-    except Exception as e:
-        print(f"Failed to save data to both paths. Error: {e}")
+# # Attempt to save the DataFrame to Excel, handle exceptions
+# try:
+#     df.to_excel(excel_file_path, index=False)
+#     print(f"Data saved to {excel_file_path}")
+# except PermissionError:
+#     alternative_path = "C:\\Users\\91861\\Documents\\plot.xlsx"
+#     try:
+#         df.to_excel(alternative_path, index=False)
+#         print(f"PermissionError for the first path. Data saved to alternative path {alternative_path}")
+#     except Exception as e:
+#         print(f"Failed to save data to both paths. Error: {e}")
+
