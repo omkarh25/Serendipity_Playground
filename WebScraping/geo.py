@@ -1,74 +1,48 @@
-<<<<<<< HEAD
-from geopy.geocoders import Nominatim
-import pandas as pd
+# import pandas as pd
+# from geopy.geocoders import Nominatim
+# from geopy.exc import GeocoderTimedOut
+# from time import sleep
 
-# Correctly formatted file path
-file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\bhoodevi 2.xlsx'  # Raw string to handle file path
+# # Function to geocode a location
+# def geocode_location(location, geolocator):
+#     try:
+#         geocoded_location = geolocator.geocode(location)
+#         if geocoded_location:
+#             return geocoded_location.latitude, geocoded_location.longitude
+#         else:
+#             return None, None
+#     except GeocoderTimedOut:
+#         return None, None
 
-# Load the Excel file
-addresses_df = pd.read_excel(file_path)
+# # Load the Excel file
+# file_path = 'C:/users/91861/OneDrive/Desktop/bhoodevi/WebScraping/bhoodevi 2.xlsx'
+# # Read all sheets
+# xls = pd.ExcelFile(file_path)
+# sheet_names = xls.sheet_names
 
-# Initialize geolocator
-geolocator = Nominatim(user_agent="geoapiExercises")
+# # Initialize Nominatim Geocoder
+# geolocator = Nominatim(user_agent="JohnDoePersonalProject")
 
-# Function to geocode address
-def geocode_address(address):
-    try:
-        location = geolocator.geocode(address)
-        if location:
-            return location.latitude, location.longitude
-        else:
-            return None, None
-    except Exception as e:
-        return None, None
+# # Process each sheet
+# for sheet_name in sheet_names:
+#     df = pd.read_excel(file_path, sheet_name=sheet_name)
+#     location_column = 'Location'  # Replace with your actual location column name
 
-# Geocode each address in the dataframe
-addresses_df['Coordinates'] = addresses_df['Location'].apply(geocode_address)
+#     # Check if location column exists
+#     if location_column in df.columns:
+#         # Geocode each location
+#         for index, row in df.iterrows():
+#             location = row[location_column]
+#             lat, lng = geocode_location(location, geolocator)
+#             df.at[index, 'Latitude'] = lat
+#             df.at[index, 'Longitude'] = lng
+#             sleep(1)  # Respect Nominatim's usage limit
 
-# Splitting the coordinates into latitude and longitude
-addresses_df[['Geo Latitude', 'Geo Longitude']] = pd.DataFrame(addresses_df['Coordinates'].tolist(), index=addresses_df.index)
+#         # Save the results back to a new sheet in the same Excel file
+#         with pd.ExcelWriter('geocoded_output.xlsx', mode='a', engine='openpyxl', if_sheet_exists='replace') as writer:
+#             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
-# Save the updated results to a new Excel file
-addresses_df.to_excel('geocoded_addresses_updated.xlsx', index=False)
+# print("Geocoding complete.")
 
-print("Geocoding complete. Updated results saved to 'geocoded_addresses_updated.xlsx'.")
-=======
-import time
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut, GeocoderServiceError
-from openpyxl import load_workbook
 
-def do_geocode(address, geolocator):
-    try:
-        return geolocator.geocode(address)
-    except GeocoderTimedOut:
-        time.sleep(1)  # Retry after a short wait in case of timeout
-        return do_geocode(address, geolocator)
-    except GeocoderServiceError as e:
-        print(f"Geocoder service error for address '{address}': {e}")
-        return None
 
-def main():
-    file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\your_excel_file.xlsx'  # Update with your file name
-    wb = load_workbook(file_path)
-    sheet = wb.active
-    geolocator = Nominatim(user_agent="geoapiExercises")
-
-    for index, row in enumerate(sheet.iter_rows(min_row=1, max_col=1, values_only=True), start=1):
-        if row[0] and isinstance(row[0], str) and row[0].strip():
-            address = row[0]  # Assuming address is in the first column
-            location = do_geocode(address, geolocator)
-            if location:
-                sheet.cell(row=index, column=2).value = location.latitude
-                sheet.cell(row=index, column=3).value = location.longitude
-            else:
-                print(f"Location not found or error occurred for address: {address}")
-        else:
-            print(f"Empty or invalid address at row {index}")
-
-    updated_file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\updated_your_excel_file.xlsx'
-    wb.save(updated_file_path)  # Saves the workbook with coordinates
-
-if __name__ == "__main__":
-    main()
->>>>>>> 3a05ebf1f9e6b31c23aae6394e633958849758de
