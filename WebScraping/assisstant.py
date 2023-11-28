@@ -230,48 +230,50 @@ def generate_text(prompt, api_key, model="text-davinci-003"):
         )
         return response.choices[0].text.strip()
     except Exception as e:
-        return f"Error: {str(e)}"
+        print(f"Error in generate_text: {e}")
+        return None
 
 def parse_geocode(geocode):
-    # Assuming the geocode format is "latitude, longitude"
     try:
         latitude, longitude = geocode.split(", ")
         return float(latitude), float(longitude)
     except Exception as e:
-        return None, None
+        print(f"Error in parse_geocode: {e}")
+        return 'N/A', 'N/A'
 
 def get_geocodes_from_excel(file_path, api_key):
     try:
-        # Read the Excel file
         df = pd.read_excel(file_path)
 
-        # Check if 'location' column exists
-        if 'location' not in df.columns:
-            return "The Excel file does not have a 'location' column."
+        if 'Location' not in df.columns:
+            return "The Excel file does not have a 'Location' column."
 
-        # Create new columns for latitude and longitude
-        df['Latitude'] = ''
-        df['Longitude'] = ''
+        df['Latitude'] = 'N/A'
+        df['Longitude'] = 'N/A'
 
-        # Iterate over each location and get the geocode
         for index, row in df.iterrows():
-            location = row['location']
+            location = row['Location']
+            print(f"Processing location: {location}")
             prompt = f"Give the geocode of {location}"
-            geocode = generate_text(prompt, api_key=api_key, model="text-davinci-003")
-            latitude, longitude = parse_geocode(geocode)
+            geocode = generate_text(prompt, api_key=api_key)
+            if geocode:
+                latitude, longitude = parse_geocode(geocode)
+            else:
+                print(f"Failed to get geocode for {location}")
+                latitude, longitude = 'N/A', 'N/A'
+            
             df.at[index, 'Latitude'] = latitude
             df.at[index, 'Longitude'] = longitude
 
-        # Save the results to a new Excel file
-        output_file = 'geocodes_output33.xlsx'  # Change the path if needed
+        output_file = 'geocodes_output neww.xlsx'
         df.to_excel(output_file, index=False)
         return f"Geocodes saved to {output_file}"
-
+  
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error in get_geocodes_from_excel: {str(e)}"
 
-# Example usage
-file_path = 'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\coo.xlsx'  # Replace with your actual file path
-api_key = "your-api-key-here"  # Replace with your actual OpenAI API key
+# Replace the file path and API key with your actual file path and new API key
+file_path = r'coo.xlsx'
+api_key = "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"
 result = get_geocodes_from_excel(file_path, api_key)
 print(result)
