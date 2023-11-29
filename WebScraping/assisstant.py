@@ -218,6 +218,10 @@
 
 import openai
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+load_dotenv(r"C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\.env")
 
 def generate_text(prompt, api_key, model="text-davinci-003"):
     openai.api_key = api_key
@@ -246,34 +250,34 @@ def get_geocodes_from_excel(file_path, api_key):
         df = pd.read_excel(file_path)
 
         if 'Location' not in df.columns:
-            return "The Excel file does not have a 'Location' column."
+            print("The Excel file does not have a 'Location' column.")
+            return
 
         df['Latitude'] = 'N/A'
         df['Longitude'] = 'N/A'
 
         for index, row in df.iterrows():
             location = row['Location']
-            print(f"Processing location: {location}")
             prompt = f"Give the geocode of {location}"
             geocode = generate_text(prompt, api_key=api_key)
             if geocode:
                 latitude, longitude = parse_geocode(geocode)
             else:
-                print(f"Failed to get geocode for {location}")
                 latitude, longitude = 'N/A', 'N/A'
             
             df.at[index, 'Latitude'] = latitude
             df.at[index, 'Longitude'] = longitude
 
-        output_file = 'geocodes_output neww.xlsx'
+        output_file = 'geocodes_output_new.xlsx'
         df.to_excel(output_file, index=False)
-        return f"Geocodes saved to {output_file}"
-  
+        print(f"Geocodes saved to {output_file}")
+
     except Exception as e:
-        return f"Error in get_geocodes_from_excel: {str(e)}"
+        print(f"Error in get_geocodes_from_excel: {str(e)}")
+
 
 # Replace the file path and API key with your actual file path and new API key
-file_path = r'coo.xlsx'
-api_key = "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"
+file_path = r'coo.xlsx'  # Update the file path as needed
+api_key = os.getenv("assisstant_api")# Use your new API key
 result = get_geocodes_from_excel(file_path, api_key)
 print(result)
