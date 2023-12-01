@@ -396,53 +396,136 @@
 # file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\coo.xlsx'
 # geocode_locations(file_path)
 
+# import pandas as pd
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
+# import traceback
+
+# def geocode_locations(file_path):
+#     try:
+#         # Load the Excel file
+#         df = pd.read_excel(file_path)
+
+#         # Check if 'Location' column exists
+#         if 'Location' not in df.columns:
+#             print("The Excel file does not have a 'Location' column.")
+#             return
+
+#         # Initialize the geocoder with rate limiter
+#         geolocator = Nominatim(user_agent="geoapiExercises")
+#         geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+
+#         # Geocode each location
+#         for index, row in df.iterrows():
+#             try:
+#                 location = geocode(row['Location'])
+#                 if location:
+#                     df.at[index, 'Latitude'] = location.latitude
+#                     df.at[index, 'Longitude'] = location.longitude
+#                 else:
+#                     df.at[index, 'Latitude'] = 'N/A'
+#                     df.at[index, 'Longitude'] = 'N/A'
+#             except Exception as e:
+#                 print(f"Error processing {row['Location']}: {e}")
+#                 traceback.print_exc()
+#                 df.at[index, 'Latitude'] = 'N/A'
+#                 df.at[index, 'Longitude'] = 'N/A'
+
+#             # Print progress
+#             print(f"Processed {index + 1}/{len(df)} locations")
+
+#         # Save the results to a new Excel file
+#         output_file = 'geocoded_locations.xlsx'
+#         df.to_excel(output_file, index=False)
+#         print(f"Geocoded data saved to {output_file}")
+
+#     except Exception as e:
+#         print(f"General Error: {e}")
+#         traceback.print_exc()
+
+# # Replace with your file path
+# file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\coo.xlsx'
+# geocode_locations(file_path)
+
+# import pandas as pd
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
+# import traceback
+
+# def geocode_locations(file_path):
+#     try:
+#         df = pd.read_excel(file_path)
+
+#         if 'Location' not in df.columns:
+#             print("The Excel file does not have a 'Location' column.")
+#             return
+
+#         geolocator = Nominatim(user_agent="geoapiExercises")
+#         geocode = RateLimiter(geolocator.geocode, min_delay_seconds=0.5)  # Reduced delay
+
+#         for index, row in df.iterrows():
+#             location_name = row['Location']
+#             try:
+#                 location = geocode(location_name)
+#                 if location:
+#                     df.at[index, 'Latitude'] = location.latitude
+#                     df.at[index, 'Longitude'] = location.longitude
+#                     print(f"Processed: {location_name} -> Lat: {location.latitude}, Long: {location.longitude}")
+#                 else:
+#                     df.at[index, 'Latitude'] = 'N/A'
+#                     df.at[index, 'Longitude'] = 'N/A'
+#                     print(f"Location not found: {location_name}")
+#             except Exception as e:
+#                 print(f"Error processing {location_name}: {e}")
+#                 df.at[index, 'Latitude'] = 'N/A'
+#                 df.at[index, 'Longitude'] = 'N/A'
+
+#         output_file = 'geocoded_locations123.xlsx'
+#         df.to_excel(output_file, index=False)
+#         print(f"Geocoded data saved to {output_file}")
+
+#     except Exception as e:
+#         print(f"General Error: {e}")
+#         traceback.print_exc()
+
+# file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\coo.xlsx'
+# geocode_locations(file_path)
+
+
 import pandas as pd
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
-import traceback
+import googlemaps
+import os
+import time
+from dotenv import load_dotenv
 
-def geocode_locations(file_path):
-    try:
-        # Load the Excel file
-        df = pd.read_excel(file_path)
+load_dotenv(r"C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\.env")
 
-        # Check if 'Location' column exists
-        if 'Location' not in df.columns:
-            print("The Excel file does not have a 'Location' column.")
-            return
+def geocode_with_google(file_path, api_key):
+    df = pd.read_excel(file_path)
+    gmaps = googlemaps.Client(key=api_key)
 
-        # Initialize the geocoder with rate limiter
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-
-        # Geocode each location
-        for index, row in df.iterrows():
-            try:
-                location = geocode(row['Location'])
-                if location:
-                    df.at[index, 'Latitude'] = location.latitude
-                    df.at[index, 'Longitude'] = location.longitude
-                else:
-                    df.at[index, 'Latitude'] = 'N/A'
-                    df.at[index, 'Longitude'] = 'N/A'
-            except Exception as e:
-                print(f"Error processing {row['Location']}: {e}")
-                traceback.print_exc()
+    for index, row in df.iterrows():
+        try:
+            geocode_result = gmaps.geocode(row['Location'])
+            if geocode_result:
+                location = geocode_result[0]['geometry']['location']
+                df.at[index, 'Latitude'] = location['lat']
+                df.at[index, 'Longitude'] = location['lng']
+            else:
                 df.at[index, 'Latitude'] = 'N/A'
                 df.at[index, 'Longitude'] = 'N/A'
+            print(f"Processed: {row['Location']}")
+        except Exception as e:
+            print(f"Error: {e}")
+            df.at[index, 'Latitude'] = 'N/A'
+            df.at[index, 'Longitude'] = 'N/A'
+        time.sleep(1)  # To prevent exceeding query limit
 
-            # Print progress
-            print(f"Processed {index + 1}/{len(df)} locations")
+    output_file = 'geocoded_with_google2.xlsx'
+    df.to_excel(output_file, index=False)
+    print(f"Data saved to {output_file}")
 
-        # Save the results to a new Excel file
-        output_file = 'geocoded_locations.xlsx'
-        df.to_excel(output_file, index=False)
-        print(f"Geocoded data saved to {output_file}")
-
-    except Exception as e:
-        print(f"General Error: {e}")
-        traceback.print_exc()
-
-# Replace with your file path
+# Replace with your file path and API key
 file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\coo.xlsx'
-geocode_locations(file_path)
+api_key = os.getenv("Google1_api_key")
+geocode_with_google(file_path, api_key)      
