@@ -27,7 +27,7 @@ def geocode_with_google(file_path, api_key):
             df.at[index, 'Longitude'] = 'N/A'
         time.sleep(1)  # To prevent exceeding query limit
 
-    output_file = 'geocoded_with_google3.xlsx'
+    output_file = 'geocoded_with_google4.xlsx'
     df.to_excel(output_file, index=False)
     print(f"Data saved to {output_file}")
 
@@ -35,3 +35,4 @@ def geocode_with_google(file_path, api_key):
 file_path = r'C:\Users\91861\OneDrive\Desktop\bhoodevi\WebScraping\coo1.xlsx'
 api_key = os.getenv("Google2_api_key")
 geocode_with_google(file_path, api_key)      
+ 
